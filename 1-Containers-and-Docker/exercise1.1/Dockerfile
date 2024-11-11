@@ -1,22 +1,24 @@
-# Pull in the layer of the base image: golang:1.23.3-alpine
+# Pull in the layer of the base image
+FROM golang:1.23.3-alpine
 
+# Set author label
+LABEL author="<YOUR-EMAIL>"
 
-# Set author label: LABEL author=[YOUR-EMAIL]
+# Set working directory
+WORKDIR /opt
 
+# Copy local files to the working directory
+COPY go.mod main.go ./
 
-# Set working directory: `/opt`
+# List items in working directory and show main.go content
+RUN ls -lsa && cat main.go
 
+# Build the app and show /usr directory
+RUN CGO_ENABLED=0 go build -o /usr/myapp && \
+    ls -lsa /usr
 
-# Copy local files `go.mod` and `main.go` to the working directory
-
-
-# List items in the working directory (ls -lsa) and show content of the `main.go`file (cat)
-
-
-# Build the app (CGO_ENABLED=0 go build -o /usr/myapp) and show the /usr directory  (ls -lsa)
-
-
-# Expose the port 8888
-
+# Expose port 8888
+EXPOSE 8888
 
 # Set the entrypoint to run the app
+ENTRYPOINT ["/usr/myapp"]
